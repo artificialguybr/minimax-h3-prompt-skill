@@ -1,0 +1,89 @@
+Full-Reference Mode (Ref2VA) Rewrite Output Format Guide — six sections, exact order
+
+Write ALL sections in English. Preserve the original language only for dialogue/lyrics inside <d> and for text visibly present in the scene.
+
+Output the six sections in this order:
+1. subject_definitions
+2. summary
+3. retention_analysis
+4. detailed_description
+5. overall_soundscape
+6. non_diegetic_music
+
+Reference labels (once assigned, a label keeps the same meaning across ALL sections):
+- <Subject N>: visible content abstracted from reference assets that can be reused or modified (person, animal, object, scene, clothing, prop, effect, style, action, pose). One subject may come from multiple assets; one asset may provide multiple subjects.
+  <Subject 1> is the young woman in <Picture 1>, with long dark hair, a blue cardigan, and a thin silver necklace.
+  <Subject 1> is the woman whose appearance comes from <Picture 1> and whose walking motion comes from <Video 1>.
+- <Picture N>: a reference image used as a concrete target frame (first/last/key frame) or shot-planning anchor (storyboard).
+  <Picture 2> is the first frame of [Shot 1], showing a woman seated beside a cafe window.
+  If an image only defines a character/scene/costume/style, cite it inside the <Subject N> line instead of a standalone picture entry.
+  Storyboard use: <Picture 3> is a storyboard reference for [Shot 1] and [Shot 2], defining their viewpoint, subject placement, and shot order.
+- <Video N>: whole-video relationships only — editing a source video, continuing from one, or referencing its camera movement/cuts/rhythm/temporal structure. Reused people/objects/actions from a video still go under <Subject N>.
+  <Video 1> is the source video for the target video edit.
+- <Audio N>: a standalone audio asset or enabled synced audio track from a reference video. Uses: copy signal, reference BGM style, reference voice timbre/delivery, reuse dialogue/lyrics/SFX, reference beat/rhythm/continuity.
+  <Audio 1> is the voice-timbre reference for <Subject 1> (S1).
+<Video N> and <Audio N> are numbered independently — indices do not pair across categories. An ordinary reference video does NOT create an <Audio N> just because it contains sound.
+
+summary: one short English paragraph, beginning with a square-bracketed task-type prefix:
+- [keyframe completion] — an image is a concrete frame anchor (first/last/key/edited)
+- [reference generation] — assets provide guidance only, no concrete frame anchor, no source-video edit/continuation
+- [video editing] — an existing source video is directly modified
+- [video continuation] — new content continues/extends/resumes from a source video
+- [audio reuse] — the same audio signal is reused in full or part
+- [audio reference] — only style/timbre/content/beat/texture is referenced, signal not copied
+Combine with "+" without repeating types. Presence of video/audio does NOT auto-create a task type; a video supplying only camera/rhythm is [reference generation]. For video editing with original audio kept, add audio reuse; for continuation without copying audio, use audio reference. For video-editing tasks begin the summary with: The target video is an edited version of <Video 1>.
+Do not introduce new reference labels in the summary.
+
+retention_analysis: one line per reference label, fixed English markers.
+Visible content markers: fully_preserved / partially_preserved / attribute_transfer / weak_reference
+Audio markers: fully_copy / partially_copy / reference / weak_reference
+  <Subject 1> (appears in [Shot 1], [Shot 3]): fully_preserved - the exposed brick wall, orange sofa, and neon sign are retained.
+  <Video 1> (cut and pacing structure): weak_reference - ...
+  <Audio 1>: fully_copy - <Audio 1> is reused 1:1 as the target video's complete final audio track.
+  <Audio 2>: reference - the target speaker follows <Audio 2>'s voice timbre without copying the original signal.
+Marker must stay within the role defined in subject_definitions. New plot events in the target are not fidelity losses.
+For generation tasks, detailed_description is normally 350-500 English words; dialogue-dense content prioritizes the complete spoken timeline over word count.
+
+detailed_description: same grammar as the base guide ([Shot 1] no timestamp; [Shot N] At MM:SS.mmm; camera as natural English; speaker IDs (S1), (S2); <d>[Language] ...</d>; <scenetrans>, <cutoff>). Differences:
+- Style opening: one or two English sentences BEFORE [Shot 1].
+  The target video is in a cinematic, literary music-video style with soft lighting and a slightly desaturated color palette.
+  [Shot 1] The scene opens in a crowded urban street...
+- Insert <Subject N>, <Picture N>, <Video N>, <Audio N> labels at first appearance and wherever their roles apply. Frame anchors in natural phrasing: the shot begins from <Picture 1> / the shot's keyframe corresponds to <Picture 2> / the shot ends on <Picture 3>.
+- When a referenced subject speaks, keep both labels: <Subject 2> (S1) turns toward the woman and says, <d>[English] Last summer, I went to my grandfather's house.</d>
+- If the speaker is not a defined subject, use a stable voice description + (Sx).
+- Vocal content that exists only inside a directly reused BGM/soundtrack uses <Audio N> as the audible source and gets NO new (Sx). A concrete person/character/narrator producing the voice gets (Sx).
+- Directly reused dialogue/narration/lyrics: preserve exact source words and original language inside <d>; write [unclear] for unintelligible spans; standardize punctuation (strip tildes/emoji/decoration); end complete statements with . ? ! before </d>.
+- When only timbre/rhythm/emotion/delivery is referenced, do NOT carry the original dialogue into the target video.
+- Assign (Sx) once, in order of actual vocal events; reuse the ID at every vocal event; never renumber. Do not write (Sx) in retention_analysis.
+
+overall_soundscape / non_diegetic_music: same definitions as the base guide. Ambience/SFX relationships go in overall_soundscape; audience-only score in non_diegetic_music; if one audio provides both, state each relationship in its matching section. Never repeat full dialogue/lyrics in these sections.
+
+Complete example:
+subject_definitions:
+<Subject 1> is the coffee-shop environment in <Picture 1>, featuring an exposed brick wall, an orange tufted sofa with patterned pillows, a neon sign, and a wooden coffee table.
+<Subject 2> is the fluffy white Samoyed in <Picture 2>, <Picture 3>, and <Picture 4>, with thick white fur, pointed ears, a dark nose, and a curved tail.
+<Subject 3> is the young blonde woman in <Video 1>, with long blonde hair and a light-pink button-down shirt with rolled-up sleeves.
+<Subject 4> is the young man in <Video 2>, with short wavy brown hair and a dark-grey hoodie with drawstrings.
+<Audio 1> is the voice-timbre reference for <Subject 3> (S1), containing a spoken English vocal layer.
+
+summary:
+[reference generation + audio reference] The target video shows <Subject 3> eating a cookie in <Subject 1>. <Subject 4> enters with <Subject 2>, which lunges toward the cookie. The three-shot exchange uses <Audio 1> as the voice-timbre reference for <Subject 3> and ends with a canned audience laugh.
+
+retention_analysis:
+<Subject 1> (appears in [Shot 1], [Shot 2], [Shot 3]): fully_preserved - the exposed brick wall, orange tufted sofa, patterned pillows, neon sign, and wooden coffee table are retained.
+<Subject 2> (appears in [Shot 1], [Shot 2]): fully_preserved - the Samoyed's thick white fur, pointed ears, dark nose, and curved tail are retained.
+<Subject 3> (appears in [Shot 1], [Shot 2], [Shot 3]): fully_preserved - the blonde woman's identity, long hair, and light-pink shirt are retained.
+<Subject 4> (appears in [Shot 1], [Shot 2]): fully_preserved - the young man's short wavy brown hair and dark-grey hoodie are retained.
+<Audio 1>: reference - its vocal timbre guides the dialogue delivery of <Subject 3> without copying the original signal.
+
+detailed_description:
+The target video uses a realistic multi-camera sitcom style with warm indoor lighting.
+[Shot 1] A medium shot establishes <Subject 1>, the coffee shop with its exposed brick wall, orange tufted sofa, patterned pillows, neon sign, and wooden coffee table. <Subject 3> (S1), the young woman with long blonde hair and a light-pink button-down shirt with rolled-up sleeves, sits on the sofa holding a chocolate-chip cookie. From the left, <Subject 4>, the young man with short wavy brown hair and a dark-grey hoodie with drawstrings, enters holding the leash of <Subject 2>, the thick-furred white Samoyed with pointed ears, a dark nose, and a curved tail. The dog lunges toward the cookie and pulls the leash taut. <Subject 3> (S1) jerks her hand back and, using the clear youthful voice timbre referenced from <Audio 1>, exclaims with light annoyance, <d>[English] Hey! Watch your dog!</d> She closes her lips and guards the cookie while <Subject 4> pulls the dog back.
+[Shot 2] At 00:03.000, the shot cuts to a close-up of <Subject 4> (S2), the young man in the dark-grey hoodie from Shot 1, sitting beside <Subject 3> on the sofa and holding <Subject 2> securely in his arms. <Subject 4> (S2) says in a casual young male voice with a playful tone and an easy conversational pace, <d>[English] He just likes cookies more than me.</d> He closes his mouth into an apologetic smile and strokes the dog's thick white fur.
+[Shot 3] At 00:05.000, the shot cuts to a close-up of <Subject 3> (S1), the blonde woman in the light-pink shirt from Shot 1. Her annoyance softens as she looks toward the Samoyed. <Subject 3> (S1) replies in the same clear youthful voice referenced from <Audio 1> with an amused cadence, <d>[English] Well, he has good taste at least.</d> She smiles and raises the cookie in a small toast-like gesture. A classic canned audience laugh begins immediately after the line and continues through the final frame.
+
+overall_soundscape:
+Soft indoor coffee-shop room tone continues throughout the scene.
+
+non_diegetic_music:
+N/A
