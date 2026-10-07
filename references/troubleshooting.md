@@ -1,68 +1,53 @@
-Troubleshooting table: symptom -> cause -> fix (compiled from community tests, official discussions, and platform guides)
+# Diagnose, repair, evaluate
 
-FAILURE: Output ignores my alignment line / keyframes drift
-CAUSE: The alignment line was paraphrased. H3 was trained on exact strings.
-FIX: Copy the alignment line character-for-character. I2VA must be exactly:
-  For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.
-FL2VA/L2VA timestamps must be the clip duration to exactly two decimals (frames/24; 124 frames = 5.17).
+Symptoms suggest hypotheses; they do not prove root causes. Inspect the rendered clip, actual inputs, expanded prompt and request settings before editing text.
 
-FAILURE: FL2VA/L2VA produces a morph or warp instead of motion
-CAUSE: Two static descriptions ("the closed notebook. then the open notebook.") give the model two states and no transition.
-FIX: Write the physical arc between states with intermediate changes, and end with a "landing" sentence: "...settles into the exact pose, spacing, and composition established by <Picture 2>."
+| Symptom | Inspect first | Smallest useful repair |
+| --- | --- | --- |
+| Opening/ending misses image | Wired role, crop, mode, alignment duration | Correct input routing; describe compatible path and endpoint |
+| Endpoint transition morphs | State incompatibility, missing contact/path | Name intermediate physical changes; simplify or split |
+| Unwanted cuts | Shot markers, conflicting single-take/cut language | Retain Shot 1 only; describe phases inside it |
+| Wrong face/product | Reference role, crop, conflicting assets, subject size | Narrow identity/product reference role; use readable framing |
+| Reversed or floating motion | Initial pose, direction, supports, contact | Describe origin, direction, contact and settled result |
+| Wrong words/language | Exact script, language tag, expansion, speaking window | Preserve exact line; specify language/accent; allocate time |
+| Both people speak | Speaker mapping, supplied voices, simultaneous cues | One visible speaker per turn; tie speech to action; silent listener |
+| Unwanted extra speech | Empty time, vague mouth movement, audio source | Specify post-line silent reaction and complete sound policy |
+| Music despite no score | Field omitted, diegetic source, copied audio | Use N/A for score; clarify reference layers and room sounds |
+| Audio copy differs | Reference/reuse distinction, enabled track, external attachment | Correct relationship; use exact audio assembly if essential |
+| Rubber mouth | Face size, head occlusion, pace, audio timing | Simplify delivery/camera; use supported target-line conditioning |
+| Text/logo drifts | Scale, motion, multiple edits, unsupported exactness | Isolate or composite approved graphic |
+| Continuation repeats | Source tail, next action, conflicting reference role | Describe terminal state and new action; test editorial cut |
+| 2K changes approved take | Regeneration route, inherited context | Review refinement; regenerate or keep approved base |
+| Same seed differs | Model/runtime, media order, expansion, hardware | Pin the full environment and record expanded prompt |
+| Acceleration harms sound | Checkpoint/LoRA, steps, audio decoder/schedule | Compare approved baseline and listen; remove unverified speedup |
 
-FAILURE: Dialogue is gibberish / wrong language / mumbled
-CAUSE: Line not verbatim, summarized ("she says something comforting"), too long for the shot, or missing final period.
-FIX: Write the exact line inside <d>[Language] ...</d>; keep it speakable within the shot (read it aloud); ALWAYS end with a period before </d> - without it the model mumbles.
+## Repair policy
 
-FAILURE: Lip-sync drifts or voice keeps talking past the line (local/ComfyUI)
-CAUSE: Silence in the reference audio gets filled with a shuffled version of the reference voice.
-FIX: Trim the reference audio to match the expected length of the spoken lines, or force continuous speech in the prompt.
+Keep the successful clip/source and list the observed defect precisely. Revise one main cause hypothesis at a time. Do not invent a precise diagnosis such as "reversed training footage" or "missing period" from a single failure. If protected content must remain exact, use masks or post-production where available.
 
-FAILURE: "No subtitles / no logo" made it WORSE (local/ComfyUI)
-CAUSE: CFG=1 means there is no negative branch; a negative prompt has no effect and "no subtitles" registers subtitles as content.
-FIX: Write what SHOULD be there ("the sign above the door is blank"), or scope exclusions via retention_analysis in Ref2VA. On hosted APIs (fal, Pixo), an explicit exclusion list at the end of the prompt works.
+Do not soften blocked requests to evade safety enforcement. State the interface limitation and offer a compliant alternative preserving the creative goal where possible.
 
-FAILURE: Faces distorted
-CAUSE: Wide shots with small faces in frame - H3 distorts them at any resolution.
-FIX: Compose faces in close/medium shots. Keep the face large in the frame.
+## What was removed from the old package
 
-FAILURE: Prompt adherence poor at high resolution (local)
-CAUSE: At 768p adherence to shot structure/angles drops dramatically vs 352-416p.
-FIX: Iterate at low resolution; use the best low-res clip as reference and regenerate at target resolution.
+- Universal ~7,000-character ceiling: a destination-specific limit must be checked.
+- Universal ~20 words/15 seconds and one sentence/block: plan from real delivery time instead.
+- "No guidance/negative field anywhere": documented for one integration, not all wrappers.
+- "No subtitles always introduces subtitles": positive phrasing is useful, but universal failure is not established.
+- "Room tone triggers music": official examples use room tone; treat a local symptom as an experiment.
+- "Audio must always have visual input": local and hosted schemas differ.
+- "Reference must use different words": appropriate for timbre-only clarity, inappropriate for exact reuse.
+- Exact cut tolerance, universal physical-reasoning percentage, four-window cap and +13% sharpening: unsupported as general H3 facts.
+- Universal CPU-seed cross-GPU guarantee and specific LoRA scales/triggers: require pinned implementation/card and testing.
+- "Editing preserves omitted content": omission cannot guarantee preservation.
 
-FAILURE: Chained continuation repeats the first clip's motion / degrades each generation
-CAUSE: Reference is stronger than instruction; each chained generation compounds drift.
-FIX: Generate independent clips and cut them in an editor (won 3/3 in a blind 3-seed test), or use Ref2VA video editing with explicit per-change instructions paired with explicit stability requirements.
+## A/B evaluation protocol
 
-FAILURE: Model silently changed my scene (removed blood, swapped elements) with no error
-CAUSE: Content-policy "partial refusal" - it keeps the composition and alters the flagged element. Error 1026 = input-side block, 1027 = output-side.
-FIX: Describe the sensitive element less literally, avoid real celebrity names/film titles (heaviest trigger), keep the composition, change the flagged detail.
+Hold model/version, seed when available, media order, duration, resolution, expansion and sampler fixed. Change one prompt factor. Compare several seeds if budget permits; one take cannot establish a universal trick. Record expected observable outcome before rendering.
 
-FAILURE: Audio quality bad despite passing machine QC (WER, CLAP)
-CAUSE: Machine metrics miss audio artifacts; Turbo LoRAs degrade audio.
-FIX: Final audio pass/fail is always human listening. Drop Turbo LoRAs for audio-critical shots.
+Score each 0–2: requested action, identity/product, physical contact, composition/camera, endpoint/continuity, exact speech/speaker, audiovisual synchronization, sound quality, style consistency, and unwanted elements. Mark irrelevant criteria N/A. Any critical protected attribute failure rejects the take regardless of average score.
 
-FAILURE: Conflicting structure - "one continuous shot" plus multiple cuts; camera and action both moving in every sentence
-CAUSE: Contradictory or overpacked instructions.
-FIX: One action and one camera move per shot. Never request one continuous shot and multiple cuts. Fit dialogue to shot length.
+Watch full-speed first; inspect sampled frames and failure moments second. Listen separately to the audio. ffprobe can check duration/fps/dimensions/channels when files exist, but container properties do not establish creative success. Exact logo, copy, pronunciation and waveform copying need their own checks.
 
-FAILURE: Too many moving parts at once (new character + complex motion + dialogue + cuts all in one pass)
-CAUSE: The model solves one hard problem well, not four.
-FIX: Stage it: Pass 1 character+scene (static), Pass 2 add motion, Pass 3 add voice, Pass 4 cuts/storyboard, Pass 5 final. Repair beats regenerate: reuse the good clip via Modify Video / Ref2VA editing and specify exactly what changes ("the clock reads 4:02; it must read 4:03") and what stays identical.
+## Research versus testing
 
-FAILURE: Physical interaction looks wrong (pouring, stacking, tool use)
-CAUSE: H3's physical reasoning succeeds ~42% of the time; it breaks contact dynamics, geometry, state transitions.
-FIX: Simplify the interaction, describe contact explicitly ("her fingers close around the handle"), prefer one interaction per shot, and plan a repair pass.
-
-QUICK PRE-FLIGHT (run before submitting any prompt):
-[ ] Mode correct? (image-as-start = I2VA, not Ref2VA)
-[ ] Every reference has a numbered, named job (and an explicit "only" exclusion if needed)
-[ ] Alignment line verbatim, timestamp with two decimals
-[ ] Fields in exact order; N/A written explicitly where music/soundscape absent
-[ ] All <d> blocks: language tag, verbatim line, closing period
-[ ] Speaker IDs stable; voiceover phrase exact; <scenetrans>/<cutoff> where needed
-[ ] On-screen text in double quotes, verbatim
-[ ] Camera vocabulary from the closed set; type+amplitude+speed
-[ ] Shot count fits duration (5s: 2-3, 8s: 3-4, 10s: 4-5, 15s: 5-8)
-[ ] Faces framed close/medium; aspect ratio stated in prompt
-[ ] Total < ~7,000 characters
+This package was revised through documentation comparison and prompt-level checks. It does not contain new rendered-video benchmarks. Present example prompts as authored recipes, not tested high-quality outputs. Keep community claims optional until independently verified on the target setup.

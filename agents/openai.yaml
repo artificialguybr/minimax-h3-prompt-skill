@@ -1,0 +1,4 @@
+interface:
+  display_name: "MiniMax H3 Prompt Writer"
+  short_description: "Direct H3 video, references, dialogue and sound"
+  default_prompt: "Use $minimax-h3-prompt-writer to turn my idea and reference media into a precise audiovisual prompt for my H3 interface."

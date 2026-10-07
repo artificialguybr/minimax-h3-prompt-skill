@@ -1,0 +1,22 @@
+Hosted production brief adapter
+
+Use when the target has a rewriting/expansion layer or the user wants a natural-language prompt. This is an adapter, not another official trained schema. Verify provider controls separately. Do not assume all hosted services prefer exclusions or all local services fail on textual negation.
+
+Order:
+1. Observable medium/style and essential preservation constraints.
+2. Asset roles in actual upload order (Image 1 / Video 1 / Audio 1 for interfaces using those labels).
+3. Playback sequence: opening state, action, result; explicit cuts only when wanted.
+4. Camera, integrated in each shot where useful.
+5. Exact speaker, language, words; ambience, timed SFX and score policy.
+6. Final state and only necessary exclusions/preservation requirements.
+
+For one take, timed phases do not imply cuts: say it is one continuous shot. Choose phases from the event, not a fixed segments-per-duration table. Short clips may need no timestamps. Do not mix freeform timed blocks with formal shot-cut markers without a reason.
+
+Example — assumed first-frame input, 8 seconds:
+Animate the supplied comic panel as a flat hand-painted 2D image. Retain its rough ink outlines, paper texture, limited palette, original framing and character proportions. This is one continuous static shot.
+During the opening two seconds, the seated dog holds the mug at chest height while orange flames flicker in the background. The dog then lifts the mug by its handle, takes one small sip, and lowers it to the original position. The dog's gaze stays forward; the flames continue moving behind him. In the final seconds he settles into a still pose.
+The dog speaks English in a flat, unhurried male voice and says exactly: "This is fine." His mouth moves only during the line and rests closed afterwards. Soft fire crackles and one small swallow accompany the action. There is no audience-only music. Preserve the existing printed text and panel layout throughout.
+
+Match hosted duration/aspect settings and wired first-frame input to this text. If exact graphic preservation is essential, animate that element externally rather than promising H3 will retain every pixel.
+
+Expansion: use disabled only when the specific endpoint supports it and the brief is already complete. Balanced/quality may help an underspecified idea but can alter deliberate instructions. Compare the expanded prompt when returned. Expansion behavior is not a universal measure of quality. [S9]

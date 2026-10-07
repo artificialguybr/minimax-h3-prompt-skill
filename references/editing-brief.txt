@@ -1,0 +1,36 @@
+Video editing and continuation
+
+For structured local Ref2VA, compile the brief into all six sections in ref-en.txt. The brief below is planning input, not a replacement for that grammar.
+
+EDIT CONTRACT
+Source: exact video and enabled soundtrack.
+Change: target element, region, attribute and temporal interval.
+Keep: identity, outfit, product shape/label, geometry, motion path/timing, camera/framing and original sound that matter to the result.
+New visual path: how the edit behaves through movement and occlusion.
+Audio relationship: full reuse, partial reuse, timbre/style reference, or new soundtrack.
+Final state: target appearance at the end.
+
+Editing is generative. Omitted attributes are not guaranteed to stay unchanged. Explicit Keep clauses improve clarity but do not make an edit surgical. If a precise region must be protected, use supported mask/inpainting controls or external compositing.
+
+Example brief:
+Edit Video 1 by changing only the tabletop from white marble to dark walnut throughout the clip. Preserve the person's face, clothing, hand movement and original camera push. Preserve the bottle's shape, green glass, gold cap and label position. The bottle remains on the table with consistent contact shadows as the camera moves. Retain the original dialogue and ambience; replace no audio layers. Keep the same timing and final framing.
+
+Map a completely retained source soundtrack to fully_copy; if new sounds are added or a layer changes, use partially_copy. State the layer relationship in the appropriate audio field as well as retention_analysis. Do not infer that video sound is enabled simply from its container.
+
+For several edits, separate them by target and ensure the Keep clause does not forbid a requested change. A red-to-blue clothing edit needs partial preservation of outfit color, while face identity can remain fully preserved. Scope identity preservation to the defined role, not everything visible in an asset.
+
+CONTINUATION CONTRACT
+Starting state: final pose, position, facing direction, object locations, camera state, lighting and audible tail of source.
+New action: what happens next and how motion develops forward.
+Ending state: result or a useful next-cut pose.
+Audio: new sound continues the acoustic environment; source copying and new synthesis are distinct.
+
+Example continuation:
+Continue from Video 1's ending as the cyclist travels screen-right beside the blue wall. Match her existing forward speed, outfit and bicycle. The camera keeps tracking parallel at the same height. She slows, places her left foot on the ground, and stops beside the open doorway. Tire noise diminishes with her speed, followed by a soft shoe contact; the same distant street ambience continues. End with her stable beside the bicycle.
+
+For a dedicated extend endpoint, use its documented new-footage duration and return mode. Describe the continuation rather than replaying the source. Check whether it returns the complete extended video or only the new segment before assembly. [S10]
+
+For Ref2VA continuation use the video-continuation summary type; add audio reference if only the audible character continues, audio reuse if a source segment is actually copied. Include keyframe completion only in workflows that accept the needed anchors. Direct MiniMax V2 cannot mix keyframe and reference roles. [S3]
+
+REVIEW
+Compare source/output at opening, contact/occlusion events, middle and end. Watch the whole clip. Check the requested change, protected identity/product/text, camera and timing, audio and transition seam. A successful edit with drift may need better conditioning or compositing rather than more prose. If intent changes globally, new generation can be cleaner than repeated edits.
